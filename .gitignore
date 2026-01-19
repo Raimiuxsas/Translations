@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+bot/node_modules/
+kick-bot/node_modules/
+
+# Environment variables
+.env
+bot/.env
+kick-bot/.env
+
+# Data directories
+data/
+bot/data/
+kick-bot/data/
+
+# Logs
+*.log
+logs/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
