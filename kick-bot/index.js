@@ -6,24 +6,29 @@ const KickDatabase = require('./utils/database');
 // Initialize database
 const database = new KickDatabase();
 
-// Configuration
+// Configuration with fallbacks
 const KICK_CHANNEL = process.env.KICK_CHANNEL;
 const BOT_PREFIX = process.env.BOT_PREFIX || '!';
-const XP_PER_MINUTE = parseInt(process.env.XP_PER_MINUTE) || 5;
-const XP_CHECK_INTERVAL = parseInt(process.env.XP_CHECK_INTERVAL) || 60000;
+const PUSHER_KEY = process.env.PUSHER_KEY || 'eb1d5f283081a78b932c'; // Kick's public Pusher key
+const PUSHER_CLUSTER = process.env.PUSHER_CLUSTER || 'us2';
+
+// Parse and validate XP settings
+let XP_PER_MINUTE = parseInt(process.env.XP_PER_MINUTE);
+let XP_CHECK_INTERVAL = parseInt(process.env.XP_CHECK_INTERVAL);
+
+if (isNaN(XP_PER_MINUTE) || XP_PER_MINUTE < 1) {
+    console.warn('⚠️  Invalid XP_PER_MINUTE, using default: 5');
+    XP_PER_MINUTE = 5;
+}
+if (isNaN(XP_CHECK_INTERVAL) || XP_CHECK_INTERVAL < 10000) {
+    console.warn('⚠️  Invalid XP_CHECK_INTERVAL, using default: 60000ms');
+    XP_CHECK_INTERVAL = 60000;
+}
 
 if (!KICK_CHANNEL) {
     console.error('❌ Error: KICK_CHANNEL is not set in .env file');
     console.error('Please create a .env file based on .env.example and add your channel name');
     process.exit(1);
-}
-
-// Validate configuration
-if (isNaN(XP_PER_MINUTE) || XP_PER_MINUTE < 1) {
-    console.warn('⚠️  Invalid XP_PER_MINUTE, using default: 5');
-}
-if (isNaN(XP_CHECK_INTERVAL) || XP_CHECK_INTERVAL < 10000) {
-    console.warn('⚠️  Invalid XP_CHECK_INTERVAL, using default: 60000ms');
 }
 
 let chatRoomId = null;
@@ -71,8 +76,8 @@ async function connectToKick() {
         console.log(`💬 Connecting to chat room: ${chatRoomId}...`);
 
         // Connect to Pusher (Kick uses Pusher for chat)
-        pusher = new Pusher('eb1d5f283081a78b932c', {
-            cluster: 'us2',
+        pusher = new Pusher(PUSHER_KEY, {
+            cluster: PUSHER_CLUSTER,
             authEndpoint: 'https://kick.com/broadcasting/auth'
         });
 
