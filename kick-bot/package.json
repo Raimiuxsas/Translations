@@ -1,0 +1,28 @@
+{
+  "name": "kick-xp-rewards-bot",
+  "version": "1.0.0",
+  "description": "A Kick.com bot that tracks viewer XP and allows reward redemption without needing an API",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js"
+  },
+  "keywords": [
+    "kick",
+    "streaming",
+    "bot",
+    "xp",
+    "rewards",
+    "chat"
+  ],
+  "author": "Raimiuxsas",
+  "license": "MIT",
+  "dependencies": {
+    "ws": "^8.16.0",
+    "dotenv": "^16.3.1",
+    "pusher-js": "^8.4.0-rc2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

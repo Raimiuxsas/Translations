@@ -2,27 +2,48 @@
 
 ---
 
-## 🤖 Discord XP & Rewards Bot
+## 🎥 XP & Rewards Bots for Streamers
 
-This repository now also includes a **Discord bot** that tracks XP for users watching/listening to content in voice channels and allows them to redeem rewards!
+This repository includes **TWO bots** to reward your viewers/community with XP and redeemable rewards:
 
-### Features
-- 🎙️ Automatic XP tracking for voice channel participation
-- 📊 Level system with progress tracking
-- 🎁 Customizable reward redemption system
-- 🏆 Leaderboard to see top earners
-- 👑 Admin controls for managing XP
+### Option 1: 🥊 Kick Bot (RECOMMENDED - No API Needed!)
 
-### Quick Start
-See [QUICKSTART.md](QUICKSTART.md) for a 5-minute setup guide, or [BOT_README.md](BOT_README.md) for detailed documentation.
+**Perfect for streamers!** Tracks viewers watching your Kick streams.
+
+✅ **No API setup** - Just your channel name  
+✅ **2-minute setup** - Easiest option  
+✅ **Direct chat integration** - Native to streaming  
+✅ **Viewer tracking** - Awards XP for watching  
+
+```bash
+cd kick-bot
+npm install
+cp .env.example .env
+# Edit .env with your Kick channel name
+npm start
+```
+
+📖 **Documentation**: [KICK_BOT_README.md](KICK_BOT_README.md) | [Quick Start](kick-bot/QUICKSTART.md)
+
+---
+
+### Option 2: 💬 Discord Bot (For Community Servers)
+
+Tracks XP for voice channel participation in Discord servers.
+
+⚙️ Requires Discord bot token and setup  
+🎙️ Awards XP for voice channel time  
+📊 Full command system with embeds  
 
 ```bash
 npm install
 cp .env.example .env
-# Edit .env with your bot token and client ID
+# Edit .env with bot token and client ID
 npm run deploy
 npm start
 ```
+
+📖 **Documentation**: [BOT_README.md](BOT_README.md) | [Quick Start](QUICKSTART.md)
 
 ---
 

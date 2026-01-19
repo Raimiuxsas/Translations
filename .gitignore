@@ -1,8 +1,17 @@
 # Dependencies
 node_modules/
+bot/node_modules/
+kick-bot/node_modules/
 
 # Environment variables
 .env
+bot/.env
+kick-bot/.env
+
+# Data directories
+data/
+bot/data/
+kick-bot/data/
 
 # Logs
 *.log
