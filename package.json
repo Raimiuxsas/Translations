@@ -1,0 +1,26 @@
+{
+  "name": "discord-xp-rewards-bot",
+  "version": "1.0.0",
+  "description": "A Discord bot that tracks XP for watching content and allows reward redemption",
+  "main": "bot/index.js",
+  "scripts": {
+    "start": "node bot/index.js",
+    "dev": "node bot/index.js",
+    "deploy": "node bot/deploy-commands.js"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "xp",
+    "rewards"
+  ],
+  "author": "Raimiuxsas",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.3.1"
+  },
+  "engines": {
+    "node": ">=16.9.0"
+  }
+}
