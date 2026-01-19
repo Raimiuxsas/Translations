@@ -92,31 +92,25 @@ client.on(Events.VoiceStateUpdate, (oldState, newState) => {
         console.log(`👤 User ${userId} joined voice channel ${newState.channelId}`);
     }
     
-    // User left a voice channel
+    // User left a voice channel - just remove from tracking, XP is awarded periodically
     if (oldState.channelId && !newState.channelId) {
-        const userData = voiceChannelUsers.get(userId);
-        if (userData) {
-            const timeSpent = (Date.now() - userData.joinedAt) / 1000 / 60; // minutes
-            const xpEarned = Math.floor(timeSpent * (process.env.XP_PER_MINUTE || 10));
-            
-            if (xpEarned > 0) {
-                const result = database.addXP(userId, xpEarned);
-                console.log(`✨ User ${userId} earned ${xpEarned} XP (${timeSpent.toFixed(2)} minutes in voice)`);
-                
-                // Notify level up
-                if (result.leveledUp) {
-                    notifyLevelUp(newState.guild, userId, result.level);
-                }
-            }
-            
-            voiceChannelUsers.delete(userId);
-        }
+        voiceChannelUsers.delete(userId);
+        console.log(`👤 User ${userId} left voice channel ${oldState.channelId}`);
     }
 });
 
 // Periodic XP tracking for users in voice channels
 function startVoiceXPTracking() {
-    const checkInterval = parseInt(process.env.XP_CHECK_INTERVAL || 60000); // Default 1 minute
+    const checkInterval = parseInt(process.env.XP_CHECK_INTERVAL) || 60000; // Default 1 minute
+    const xpPerMinute = parseInt(process.env.XP_PER_MINUTE) || 10; // Default 10 XP per minute
+    
+    // Validate configuration
+    if (isNaN(checkInterval) || checkInterval < 10000) {
+        console.warn('⚠️  Invalid XP_CHECK_INTERVAL, using default: 60000ms');
+    }
+    if (isNaN(xpPerMinute) || xpPerMinute < 1) {
+        console.warn('⚠️  Invalid XP_PER_MINUTE, using default: 10');
+    }
     
     setInterval(() => {
         const now = Date.now();
@@ -126,8 +120,7 @@ function startVoiceXPTracking() {
             
             // Award XP every minute
             if (timeInChannel >= 1) {
-                const xpToAward = process.env.XP_PER_MINUTE || 10;
-                const result = database.addXP(userId, parseInt(xpToAward));
+                const result = database.addXP(userId, xpPerMinute);
                 
                 // Reset join time for next interval
                 voiceChannelUsers.set(userId, {
@@ -135,7 +128,7 @@ function startVoiceXPTracking() {
                     joinedAt: now
                 });
                 
-                console.log(`✨ User ${userId} earned ${xpToAward} XP (periodic voice tracking)`);
+                console.log(`✨ User ${userId} earned ${xpPerMinute} XP (periodic voice tracking)`);
                 
                 // Notify level up
                 if (result.leveledUp) {
@@ -150,7 +143,7 @@ function startVoiceXPTracking() {
         }
     }, checkInterval);
     
-    console.log(`🔄 Voice XP tracking started (checking every ${checkInterval / 1000}s)`);
+    console.log(`🔄 Voice XP tracking started (checking every ${checkInterval / 1000}s, awarding ${xpPerMinute} XP/min)`);
 }
 
 // Notify user when they level up
@@ -158,8 +151,9 @@ async function notifyLevelUp(guild, userId, level) {
     try {
         const member = await guild.members.fetch(userId);
         const systemChannel = guild.systemChannel;
+        const botMember = guild.members.me;
         
-        if (systemChannel && systemChannel.permissionsFor(guild.members.me).has('SendMessages')) {
+        if (systemChannel && botMember && systemChannel.permissionsFor(botMember).has('SendMessages')) {
             const { EmbedBuilder } = require('discord.js');
             const embed = new EmbedBuilder()
                 .setColor(0xFFD700)

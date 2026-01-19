@@ -1,5 +1,33 @@
 # Translations for [LoginSecurity](https://github.com/lenis0012/LoginSecurity-2)
 
+---
+
+## 🤖 Discord XP & Rewards Bot
+
+This repository now also includes a **Discord bot** that tracks XP for users watching/listening to content in voice channels and allows them to redeem rewards!
+
+### Features
+- 🎙️ Automatic XP tracking for voice channel participation
+- 📊 Level system with progress tracking
+- 🎁 Customizable reward redemption system
+- 🏆 Leaderboard to see top earners
+- 👑 Admin controls for managing XP
+
+### Quick Start
+See [QUICKSTART.md](QUICKSTART.md) for a 5-minute setup guide, or [BOT_README.md](BOT_README.md) for detailed documentation.
+
+```bash
+npm install
+cp .env.example .env
+# Edit .env with your bot token and client ID
+npm run deploy
+npm start
+```
+
+---
+
+## 🌍 LoginSecurity Translations
+
 ## If you'd like to add a language, please see the "[Contributing wiki page](https://github.com/lenis0012/Translations/wiki/Contribute)"! Thanks!
 
 ## I want to update outdated translations

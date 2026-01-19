@@ -50,7 +50,7 @@ class Database {
         }
     }
 
-    getUser(userId) {
+    getUser(userId, skipSave = false) {
         if (!this.data.users[userId]) {
             this.data.users[userId] = {
                 xp: 0,
@@ -58,13 +58,16 @@ class Database {
                 lastActivity: Date.now(),
                 redeemedRewards: []
             };
-            this.save();
+            // Only save if not skipped (used when immediately followed by another save)
+            if (!skipSave) {
+                this.save();
+            }
         }
         return this.data.users[userId];
     }
 
     addXP(userId, amount) {
-        const user = this.getUser(userId);
+        const user = this.getUser(userId, true); // Skip save here, will save at the end
         user.xp += amount;
         user.lastActivity = Date.now();
         
